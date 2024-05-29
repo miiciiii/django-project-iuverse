@@ -1,18 +1,21 @@
-# admin.py
-
 from django.contrib import admin
-from .models import Gallery, GalleryImage
+from .models import Gallery, GalleryImage, RequestGallery, RequestGalleryImage
 
 class GalleryImageInline(admin.TabularInline):
     model = GalleryImage
+    extra = 1  # Number of empty forms to display
 
 class GalleryAdmin(admin.ModelAdmin):
+    list_display = ['title', 'description']
     inlines = [GalleryImageInline]
-    list_display = ['title', 'description']  # Display these fields in the admin list view
-    search_fields = ['title', 'description']  # Add these fields to the admin search
 
-class GalleryImageAdmin(admin.ModelAdmin):
-    list_display = ['gallery', 'image']  # Display these fields in the admin list view
+class RequestGalleryImageInline(admin.TabularInline):
+    model = RequestGalleryImage
+    extra = 1  # Number of empty forms to display
+
+class RequestGalleryAdmin(admin.ModelAdmin):
+    list_display = ['title', 'description']
+    inlines = [RequestGalleryImageInline]
 
 admin.site.register(Gallery, GalleryAdmin)
-admin.site.register(GalleryImage, GalleryImageAdmin)
+admin.site.register(RequestGallery, RequestGalleryAdmin)

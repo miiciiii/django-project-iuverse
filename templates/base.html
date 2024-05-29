@@ -16,6 +16,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="...replace_with_actual_integrity_code..." crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">    
 
+        <style>
+        form {
+            width: 50%;
+            margin: 0 auto;
+            background-color: #ffffff2a;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="file"] {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        button[type="submit"] {
+            background-color: #38B;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: rgb(47, 142, 201);
+        }
+    </style>
+
+
   </head>
   <body>    
     <!-- Hero section -->
@@ -200,7 +240,6 @@
             </div>
         </div>
     </section>
-
     <section id="gallery" class="tm-section-pad-top">
       <div class="container tm-container-gallery">
           <div class="row">
@@ -215,15 +254,17 @@
               <div class="col-12">
                   <div id="tm-gallery" class="mx-auto tm-gallery-container">
                       <div class="grid tm-gallery">
-                          {% for image in images %}
-                          <a href="{{ image.image.url }}">
-                              <figure class="effect-honey tm-gallery-item">
-                                  <img src="{{ image.image.url }}" alt="{{ image.title }}" class="img-fluid">
-                                  <figcaption>
-                                      <h2><i>{{ image.title }}<span>{{ image.description }}</span></i></h2>
-                                  </figcaption>
-                              </figure>
-                          </a>
+                          {% for gallery in galleries %}
+                              {% for image in gallery.gallery_images.all %}
+                                  <a href="{{ image.image.url }}">
+                                      <figure class="effect-honey tm-gallery-item">
+                                          <img src="{{ image.image.url }}" alt="Image for {{ gallery.title }}" class="img-fluid">
+                                          <figcaption>
+                                              <h2><i>{{ gallery.title }}<span>{{ gallery.description }}</span></i></h2>
+                                          </figcaption>
+                                      </figure>
+                                  </a>
+                              {% endfor %}
                           {% endfor %}
                       </div>
                   </div>
@@ -279,6 +320,21 @@
                   </div>
               </div>
           </div>
+
+          <h1>Request Gallery</h1>
+          <form action="{% url 'request_gallery' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <label for="title">Title:</label><br>
+              <input type="text" id="title" name="title"><br>
+              
+              <label for="description">Description:</label><br>
+              <textarea id="description" name="description"></textarea><br>
+              
+              <label for="images">Upload Images:</label><br>
+              <input type="file" name="images" multiple><br>
+              
+              <button type="submit">Request Gallery</button>
+          </form>
             
             
         </div><!-- row ending -->
